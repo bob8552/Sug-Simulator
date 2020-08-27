@@ -12,10 +12,28 @@ int state = 0;
 
 //Particle defenitions
 string particles[] = {
-	"Succ", 
+	"Sig", 
 	"Suc", 
-	"Jargle",
-	"Janky"
+	"Jargle A",
+	"Janky", 
+	"Sug", 
+	"Jix",
+  "Su",
+	"Succ",
+	"Jargle B"
+};
+
+//Particle properties
+string particles_properties[] = {
+	"Sig is a heavier variant of suc. It's unstable however, and will decay into a more lighter particle.",
+	"Suc is the 2nd heaviest particle. It is slightly unstable and will decay over a very long time.", 
+	"Jargle A is a harmless particle for transferring energy.",
+	"Janky is a heavier, highly unstable particle.",
+	"Sug is a strange particle that will decay into j~. It has 3 states - heavy, calm and weak.",
+	"Jix is a strange particle that is created during the decay of a p~.",
+	"Su is the lightest p~ and most abundant particle.",
+	"Succ is the heavist and rarest p~.",
+	"Jargle B is a highly unstable and harmful variant of j~."
 };
 
 //Variables
@@ -24,24 +42,87 @@ int points = 0;
 int particlesFound = 0;
 string particlesDiscovered = "";
 
-//Functions
+//--RESEARCH--
 void research() 
 {
 
-	cout << "\x1B[33mYou got your experiments ready and waited to detect a new succ particle...\033[0m\t\t\n";
+	cout << "\n\x1B[33mYou got your experiments ready and waited to detect a new particle...\033[0m\t\t\n";
 	sleep(1);
-	int randomN = rand() % 3; 
-	int foundptc = rand() % 3; 
-	if (randomN == 0) {
 
-		cout << "\x1B[33mYou and your team have discovered a new particle.\033[0m\t\t\n";
-		cout << "\x1B[33mYou decide to name it the " << particles[foundptc] << ".\033[0m\t\t\n";
+	//Funds used
+	int randomfunds = rand() % 2000 + 500;
+
+	if (randomfunds > funds) { 
+
+		cout << "\x1B[31mSeems like you have no funds. Try exchanging points for funds.\033[0m\t\t\n\n";
+
+	} else {
+
+		//Index
+		int randomN = rand() % 2; 
+		//Points recieved
+		int randomPoints = rand() % 10 + 5; 
+		//Name of found particle (random index of defined possible particles)
+		int foundptc = rand() % 8; 
+
+		//Found particle
+		string found_particle = particles[foundptc];
+		//Properties of that particle
+		string found_particle_properties = particles_properties[foundptc];
+
+		//If particle is new and index is 0
+		if (randomN == 0 && found_particle != "DISCOVERED") {
+
+			cout << "\n\x1B[33mYou and your team have discovered a new particle.\033[0m\t\t\n";
+			cout << "\x1B[33mYou decide to name it the " << found_particle << ".\033[0m\t\t\n";
+			cout << "\x1B[33m" << found_particle_properties << "\033[0m\t\t\n";
+
+			particles[foundptc] = "DISCOVERED";
+
+			//give some points
+			points += randomPoints;
+
+			cout << "\x1B[33mCongratulations! You have recieved " << randomPoints << " points!\033[0m\t\t\n";
+
+			//append to discovered particles
+			particlesDiscovered += " " + found_particle;
+			//remove money from funds
+			funds -= randomfunds;
+
+			sleep(1);
+
+			//tell the user how much funds used
+			cout << "\nYour team have used " << randomfunds << " in funds.\n";
+			cout << "So far you have discovered:" << particlesDiscovered << ".\n\n";
+
+		} else {
+
+			cout << "\x1B[33mYou could not detect any particles this time, sorry.\033[0m\t\t\n";
+			funds -= randomfunds;
+
+			sleep(1);
+
+			//tell the user how much funds used
+			cout << "\nYour team have used " << randomfunds << " in funds.\n";
+			cout << "So far you have discovered:" << particlesDiscovered << ".\n\n";
+
+		}
 
 	}
 
 }
 
+//--STATS--
+void stats() {
 
+	cout << "\n \x1B[33m>>> STATS\033[0m\t\t\n";
+	cout << "\nSo far you have discovered:" << particlesDiscovered << ".\n";
+	cout << "You have " << funds << " in funds.\n";
+	cout << "You have " << points << " points.\n\n";
+
+}
+
+//-- Main
 int main() {
 
 	//Welcome screen
@@ -63,6 +144,7 @@ int main() {
 		cout << ">";
 		getline(cin, input);
 
+		//play SUG SIMULATOR
 		if (input == "1") {
 
 			//Change state
@@ -73,6 +155,7 @@ int main() {
 
 			sleep(2);
 
+			//Story
 			cout << "\n \x1B[33m>>>     SUG SIMULATOR     <<<\033[0m\t\t\n\n";
 			cout << "You recently started work as a succ particle researcher in kirbistaraniaburg. You have been given 100k in funds to discover new particles with your group.\n\n";
 
@@ -81,10 +164,12 @@ int main() {
 			//OPTIONS
 			cout << "\x1B[32mOptions \033[0m\t\t\n";
 			cout << "\x1B[32m-Research (1) \033[0m\t\t\n";
-			cout << "\x1B[32m-Quit (2) \033[0m\t\t\n";
+			cout << "\x1B[32m-Stats (2) \033[0m\t\t\n";
+			cout << "\x1B[32m-Quit (3) \033[0m\t\t\n";
 			cout << "Please input your choice.\n";	
 			cout << "=========================\n";
 
+			//Basically all the content.
 			do {
 
 				//Variables
@@ -100,9 +185,15 @@ int main() {
 
 					research();
 
-				} else if (input == "2") {
+				}				
+				else if (input == "2") {
 
-					//exit
+					stats();
+
+				}  
+				else if (input == "3") {
+
+					//Exit
 					state = 0;
 					cout << "\nPress any key to continue...\n";
 					getchar();
