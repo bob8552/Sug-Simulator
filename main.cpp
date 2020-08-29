@@ -1,3 +1,6 @@
+// Sug Simulator v0.0.3 - Main.cpp
+// Made by Bob8552 and Drags890
+
 //Include Header Files
 #include <iostream>
 #include <stdlib.h>
@@ -5,6 +8,8 @@
 #include <time.h>
 #include <vector>
 #include <unistd.h>
+//Terminal Colours
+#include "headers/colours.h"
 
 //Declase state var
 using namespace std;
@@ -25,7 +30,7 @@ string particles[] = {
 
 //Particle properties
 string particles_properties[] = {
-	"Sig is a heavier variant of suc. It's unstable however, and will decay into a more lighter particle.",
+	"Sig is a heavier variant of a particle. It's unstable however, and will decay into a more lighter particle.",
 	"Suc is the 2nd heaviest particle. It is slightly unstable and will decay over a very long time.", 
 	"Jargle A is a harmless particle for transferring energy.",
 	"Janky is a heavier, highly unstable particle.",
@@ -46,7 +51,7 @@ string particlesDiscovered = "";
 void research() 
 {
 
-	cout << "\n\x1B[33mYou got your experiments ready and waited to detect a new particle...\033[0m\t\t\n";
+	cout << YEL("\nYou got your experiments ready and waited to detect a new particle...\n");
 	sleep(1);
 
 	//Funds used
@@ -54,7 +59,7 @@ void research()
 
 	if (randomfunds > funds) { 
 
-		cout << "\x1B[31mSeems like you have no funds. Try exchanging points for funds.\033[0m\t\t\n\n";
+		cout << RED("Seems like you have no funds. Try exchanging points for funds.\n\n");
 
 	} else {
 
@@ -63,9 +68,9 @@ void research()
 		//Points recieved
 		int randomPoints = rand() % 10 + 5; 
 		//Name of found particle (random index of defined possible particles)
-		int foundptc = rand() % 8; 
+		int foundptc = rand() % 8;
 
-		//Found particle
+		//Found particle 
 		string found_particle = particles[foundptc];
 		//Properties of that particle
 		string found_particle_properties = particles_properties[foundptc];
@@ -73,16 +78,17 @@ void research()
 		//If particle is new and index is 0
 		if (randomN == 0 && found_particle != "DISCOVERED") {
 
-			cout << "\n\x1B[33mYou and your team have discovered a new particle.\033[0m\t\t\n";
-			cout << "\x1B[33mYou decide to name it the " << found_particle << ".\033[0m\t\t\n";
-			cout << "\x1B[33m" << found_particle_properties << "\033[0m\t\t\n";
+			cout << YEL("\nYou and your team have discovered a new particle.\n");
+			cout << YEL("You decide to name it the " << found_particle << ".\n");
+			cout << YEL("" << found_particle_properties << "\n");
 
+			//Set particle as discovered
 			particles[foundptc] = "DISCOVERED";
 
 			//give some points
 			points += randomPoints;
 
-			cout << "\x1B[33mCongratulations! You have recieved " << randomPoints << " points!\033[0m\t\t\n";
+			cout << YEL("Congratulations! You have recieved " << randomPoints << " points!\n");
 
 			//append to discovered particles
 			particlesDiscovered += " " + found_particle;
@@ -95,16 +101,31 @@ void research()
 			cout << "\nYour team have used " << randomfunds << " in funds.\n";
 			cout << "So far you have discovered:" << particlesDiscovered << ".\n\n";
 
-		} else {
+		} else { //Failed in research
 
-			cout << "\x1B[33mYou could not detect any particles this time, sorry.\033[0m\t\t\n";
-			funds -= randomfunds;
+			//Decide a disaster
+			int randomN = rand() % 50; 
+			if (randomN == 0) {
 
-			sleep(1);
+			cout << SetBackWHT << SetForeRED << "Your team got in a serious accident and a succ vortex was spawned. You lost 25,000 in funds." << RESETTEXT << "\n\n";
 
-			//tell the user how much funds used
-			cout << "\nYour team have used " << randomfunds << " in funds.\n";
-			cout << "So far you have discovered:" << particlesDiscovered << ".\n\n";
+				if (funds >= 25000) {
+					funds -= 25000;
+				} else {
+					funds = 0;
+				}
+
+			} else {
+
+				cout << YEL("You could not detect any particles this time, sorry.\n");
+				funds -= randomfunds;
+
+				sleep(1);
+
+				//tell the user how much funds used
+				cout << "\nYour team have used " << randomfunds << " in funds.\n";
+				cout << "So far you have discovered:" << particlesDiscovered << ".\n\n";
+			}
 
 		}
 
@@ -115,22 +136,22 @@ void research()
 //--STATS--
 void stats() {
 
-	cout << "\n \x1B[33m>>> STATS\033[0m\t\t\n";
+	cout << YEL("\n >>> STATS\n");
 	cout << "\nSo far you have discovered:" << particlesDiscovered << ".\n";
 	cout << "You have " << funds << " in funds.\n";
 	cout << "You have " << points << " points.\n\n";
 
 }
 
-//-- Main
+//--Main--
 int main() {
 
 	//Welcome screen
-  cout << "Welcome to sug simulator!\n";
-	cout << "\x1B[31mOptions \033[0m\t\t\n";
-	cout << "\x1B[31m-Play (1) \033[0m\t\t\n";
-	cout << "\x1B[31m-Info (2) \033[0m\t\t\n";
-	cout << "\x1B[31m-Quit (3) \033[0m\t\t\n";
+  cout << "Welcome to Sug Simulator v0.0.3!\n";
+	cout << RED("Options\n");
+	cout << RED("-Play (1)\n");
+	cout << RED("-Info (2)\n");
+	cout << RED("-Quit (3)\n");
 	cout << "Please input your choice.\n";	
 	cout << "=========================\n";
 
@@ -162,10 +183,11 @@ int main() {
 			sleep(1);
 
 			//OPTIONS
-			cout << "\x1B[32mOptions \033[0m\t\t\n";
-			cout << "\x1B[32m-Research (1) \033[0m\t\t\n";
-			cout << "\x1B[32m-Stats (2) \033[0m\t\t\n";
-			cout << "\x1B[32m-Quit (3) \033[0m\t\t\n";
+			cout << GRN("Options\n");
+			cout << GRN("-Research (1)\n");
+			cout << GRN("-Stats (2)\n");
+			cout << GRN("-Transfer points into funds (3)\n");
+			cout << GRN("-Quit (4)\n");
 			cout << "Please input your choice.\n";	
 			cout << "=========================\n";
 
@@ -178,20 +200,30 @@ int main() {
 				//Input cursor
 				cout << ">";
 				//Input
-				cin >> input;
+				getline(cin, input);
 
 				//ELSEIF
-				if (input == "1") {
+				if (input == "1") { //research
 
 					research();
 
 				}				
-				else if (input == "2") {
+				else if (input == "2") { //Stats
 
 					stats();
 
 				}  
-				else if (input == "3") {
+				else if (input == "3") { //Transfer points to funds
+
+					cout << GRN("\nYou have transferred all your points into funding (Keep in mind that 1 point = 10 funds).\n\n");
+
+					//1 point = 10 funds
+					funds += points * 10;
+					//User has used all points for funds.
+					points = 0;
+
+				}  
+				else if (input == "4") { //quit
 
 					//Exit
 					state = 0;
@@ -200,7 +232,7 @@ int main() {
 
 				} else {
 
-					cout << "\x1B[31mThat is not a valid option. \033[0m\t\t\n";
+					cout << RED("That is not a valid option.\n");
 
 				}
 
@@ -208,7 +240,7 @@ int main() {
 
 		} else if (input == "2") {
 
-			cout << "Sug Simulator is a game based on the fantasy succ particles. Made by Bob8552 and lore by Drags890.\n";
+			cout << "Sug Simulator is a game based on the fantasy succ particles. Made by Bob8552 and Drags890!\n";
 
 		} else if (input == "3") {
 
@@ -219,7 +251,7 @@ int main() {
 
 		} else {
 
-			cout << "\x1B[31mThat is not a valid option. \033[0m\t\t\n";
+			cout << RED("That is not a valid option.\n");
 
 		}
 
