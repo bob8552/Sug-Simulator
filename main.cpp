@@ -1,4 +1,4 @@
-// Sug Simulator v0.0.3 - Main.cpp
+// Sug Simulator v0.0.4 - Main.cpp
 // Made by Bob8552 and Drags890
 
 //Include Header Files
@@ -44,8 +44,54 @@ string particles_properties[] = {
 //Variables
 int funds = 100000;
 int points = 0;
-int particlesFound = 0;
 string particlesDiscovered = "";
+
+//Difficulty Selector
+void select_difficulty() 
+{
+
+	cout << RED("\nPlease select a difficulty - 'easy', 'medium', 'hard'\n\n");
+	state = 2;
+
+	do {
+
+		//Variables
+		string input;
+
+		//Input cursor
+		cout << ">";
+		//Input
+		getline(cin, input);
+
+		if (input == "easy") {
+
+			funds = 500000;
+			cout << RED("\nDifficulty Set!\n\n");
+			state = 0;
+
+		}
+		else if (input == "medium") {
+
+			funds = 100000;
+			cout << RED("\nDifficulty Set!\n\n");
+			state = 0;
+
+		}
+		else if (input == "hard") {
+
+			funds = 50000;
+			cout << RED("\nDifficulty Set!\n\n");
+			state = 0;
+
+		} else {
+
+			cout << RED("That is not a valid option.\n");
+
+		}
+
+	} while (state == 2);
+
+}
 
 //--RESEARCH--
 void research() 
@@ -117,6 +163,7 @@ void research()
 
 			} else {
 
+				//You could not detect particles.
 				cout << YEL("You could not detect any particles this time, sorry.\n");
 				funds -= randomfunds;
 
@@ -147,11 +194,12 @@ void stats() {
 int main() {
 
 	//Welcome screen
-  cout << "Welcome to Sug Simulator v0.0.3!\n";
+  cout << "Welcome to Sug Simulator v0.0.4!\n";
 	cout << RED("Options\n");
 	cout << RED("-Play (1)\n");
 	cout << RED("-Info (2)\n");
-	cout << RED("-Quit (3)\n");
+	cout << RED("-Configure Difficulty (3)\n");
+	cout << RED("-Quit (4)\n");
 	cout << "Please input your choice.\n";	
 	cout << "=========================\n";
 
@@ -227,6 +275,9 @@ int main() {
 
 					//Exit
 					state = 0;
+					points = 0;
+					funds = 100000;
+					particlesDiscovered = "";
 					cout << "\nPress any key to continue...\n";
 					getchar();
 
@@ -238,11 +289,18 @@ int main() {
 
 			} while (state==1);		
 
+
+		// Continue back onto main else if
+
 		} else if (input == "2") {
 
 			cout << "Sug Simulator is a game based on the fantasy succ particles. Made by Bob8552 and Drags890!\n";
 
 		} else if (input == "3") {
+
+			select_difficulty();
+
+		} else if (input == "4") {
 
 			//exit
 			cout << "\nPress any key to continue...\n";
