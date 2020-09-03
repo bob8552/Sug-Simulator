@@ -1,4 +1,4 @@
-// Sug Simulator v0.0.4 - Main.cpp
+// Sug Simulator v0.0.6 - Main.cpp
 // Made by Bob8552 and Drags890
 
 //Include Header Files
@@ -25,26 +25,35 @@ string particles[] = {
 	"Jix",
   "Su",
 	"Succ",
-	"Jargle B"
+	"Jargle B",
+  "Pingle",
+  "Sug"
 };
 
 //Particle properties
 string particles_properties[] = {
 	"Sig is a heavier variant of a particle. It's unstable however, and will decay into a more lighter particle.",
 	"Suc is the 2nd heaviest particle. It is slightly unstable and will decay over a very long time.", 
-	"Jargle A is a harmless particle for transferring energy.",
+	"Jargle A is a harmless force particle for transferring energy.",
 	"Janky is a heavier, highly unstable particle.",
 	"Sug is a strange particle that will decay into j~. It has 3 states - heavy, calm and weak.",
 	"Jix is a strange particle that is created during the decay of a p~.",
 	"Su is the lightest p~ and most abundant particle.",
 	"Succ is the heavist and rarest p~.",
-	"Jargle B is a highly unstable and harmful variant of j~."
+	"Jargle B is a highly unstable and harmful variant of f~.",
+  "Pingle is a b~ binder particle that bonds any p~ particle together, and can get destroyed by Jargle B.",
+  "Sug is an extremely heavy particle that decays quickly into Succ, and are only stable when bonded with Su."
 };
+
+//Predefined vars
 
 //Variables
 int funds = 100000;
 int points = 0;
 string particlesDiscovered = "";
+
+//Disaster Count
+int disaster_amount = 0;
 
 //Difficulty Selector
 void select_difficulty() 
@@ -93,6 +102,49 @@ void select_difficulty()
 
 }
 
+void research_disaster() 
+{
+
+	if (disaster_amount > 0) {
+
+		int randomfunds = rand() % 4000 + 1000;
+		int failorsuccess = rand() % 10; 
+
+		if (failorsuccess == 0) {
+
+			//Points recieved
+			int randomPoints = rand() % 50 + 5; 
+
+			cout << GRN("\nYou researched and looked back at the events regarding the succ vortex and found something new about it. Congratulations, Your discovery was groundbreaking.\n");
+
+			//give some points
+			points += randomPoints;
+			//remove money from funds
+			funds -= randomfunds;
+			//RESET
+			disaster_amount = 0;
+
+			cout << GRN("Congratulations! You have recieved " << randomPoints << " points!\n\n");
+
+		} else {
+
+			//remove money from funds
+			funds -= randomfunds;
+			//RESET
+			disaster_amount = 0;
+
+			cout << RED("\nYou could not find anything due to the lack of information regarding the event.\n\n");
+
+		}
+
+	} else {
+
+		cout << RED("\nYou have no events to investigate.\n\n");
+
+	}
+
+}
+
 //--RESEARCH--
 void research() 
 {
@@ -124,9 +176,9 @@ void research()
 		//If particle is new and index is 0
 		if (randomN == 0 && found_particle != "DISCOVERED") {
 
-			cout << YEL("\nYou and your team have discovered a new particle.\n");
-			cout << YEL("You decide to name it the " << found_particle << ".\n");
-			cout << YEL("" << found_particle_properties << "\n");
+			cout << GRN("\nYou and your team have discovered a new particle.\n");
+			cout << GRN("You decide to name it the " << found_particle << ".\n");
+			cout << GRN("" << found_particle_properties << "\n");
 
 			//Set particle as discovered
 			particles[foundptc] = "DISCOVERED";
@@ -134,7 +186,7 @@ void research()
 			//give some points
 			points += randomPoints;
 
-			cout << YEL("Congratulations! You have recieved " << randomPoints << " points!\n");
+			cout << GRN("Congratulations! You have recieved " << randomPoints << " points!\n");
 
 			//append to discovered particles
 			particlesDiscovered += " " + found_particle;
@@ -154,6 +206,7 @@ void research()
 			if (randomN == 0) {
 
 			cout << SetBackWHT << SetForeRED << "Your team got in a serious accident and a succ vortex was spawned. You lost 25,000 in funds." << RESETTEXT << "\n\n";
+			disaster_amount++;
 
 				if (funds >= 25000) {
 					funds -= 25000;
@@ -194,7 +247,7 @@ void stats() {
 int main() {
 
 	//Welcome screen
-  cout << "Welcome to Sug Simulator v0.0.4!\n";
+  cout << "Welcome to Sug Simulator v0.0.6!\n";
 	cout << RED("Options\n");
 	cout << RED("-Play (1)\n");
 	cout << RED("-Info (2)\n");
@@ -233,9 +286,10 @@ int main() {
 			//OPTIONS
 			cout << GRN("Options\n");
 			cout << GRN("-Research (1)\n");
-			cout << GRN("-Stats (2)\n");
-			cout << GRN("-Transfer points into funds (3)\n");
-			cout << GRN("-Quit (4)\n");
+			cout << GRN("-Research a recent disaster (2)\n");
+			cout << GRN("-Stats (3)\n");
+			cout << GRN("-Transfer points into funds (4)\n");
+			cout << GRN("-Quit (5)\n");
 			cout << "Please input your choice.\n";	
 			cout << "=========================\n";
 
@@ -258,10 +312,15 @@ int main() {
 				}				
 				else if (input == "2") { //Stats
 
+					research_disaster();
+
+				}  
+				else if (input == "3") { //Stats
+
 					stats();
 
 				}  
-				else if (input == "3") { //Transfer points to funds
+				else if (input == "4") { //Transfer points to funds
 
 					cout << GRN("\nYou have transferred all your points into funding (Keep in mind that 1 point = 10 funds).\n\n");
 
@@ -271,7 +330,7 @@ int main() {
 					points = 0;
 
 				}  
-				else if (input == "4") { //quit
+				else if (input == "5") { //quit
 
 					//Exit
 					state = 0;
@@ -294,7 +353,7 @@ int main() {
 
 		} else if (input == "2") {
 
-			cout << "Sug Simulator is a game based on the fantasy succ particles. Made by Bob8552 and Drags890!\n";
+			cout << "Sug Simulator is a game based on finding and researching fictional particles that have weird, extra-dimensional behaviours. Made by Bob8552 and Drags890!\n";
 
 		} else if (input == "3") {
 
